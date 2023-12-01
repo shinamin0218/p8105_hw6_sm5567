@@ -248,13 +248,14 @@ print(log_plot)
 ## Identifying a 95% CI for log(beta_0 * beta_1)
 ```{r}
 log_estimate %>%
-  summarise(
+  drop_na() %>% 
+  summarize(
     lower_limit = quantile(log_function, 0.025),
     upper_limit = quantile(log_function, 0.975)) %>%
   knitr::kable(digits = 3)
 ```
 
-  * The 95% confidence interval for log(beta_0 * beta_1) is (2.055 and 2.138)
+  * The 95% confidence interval for log(beta_0 * beta_1) is (-8.007 and -4.615)
 
 
 

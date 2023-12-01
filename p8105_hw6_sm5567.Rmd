@@ -141,6 +141,7 @@ model_results |>
 ```{r, include=FALSE}
 library(shiny)
 library(modelr)
+library(ggplot2)
 library(p8105.datasets)
 ```
 
@@ -184,11 +185,13 @@ r_squared =
     results = map(models, broom::glance)
   ) %>%
   unnest(results)
+
+## Do I need to pivot wider here?
 ```
 
 ```{r}
-r_squared_plot = r_squared %>%
-  ggplot(aes(x = r.squared)) +
+r_squared_plot =
+  ggplot(r_squared, aes(x = r.squared)) +
   geom_density() +
   labs(
     title = "Distribution of R-squared Values",
@@ -196,16 +199,62 @@ r_squared_plot = r_squared %>%
     y = "Density"
   ) +
   theme_minimal()
+
+print(r_squared_plot)
 ```
 
-## . Using the 5000 bootstrap estimates, identify the 2.5% and 97.5% quantiles to provide a 95% confidence interval for r̂ 2 and log(β̂ 0∗β̂.1)
 
+## Identifying the 2.5% and 97.5% quantiles to provide a 95% confidencePerforming a 95% confidence interval for r̂ 2 and log(β̂ 0∗β̂.1)
+```{r}
+r_squared %>%
+  summarize(
+    lower_limit = quantile(r.squared, 0.025), 
+    upper_limit = quantile(r.squared, 0.975)) %>% 
+  knitr::kable(digits = 3)
+```
 
+  * The 95% confidence interval for R^2 is (0.888, 0.941)
+  
+## Creating estimate for log(beta_0 * beta_1)
+```{r}
+log_estimate =
+  weather_df %>%
+  modelr::bootstrap(n=5000) %>%
+  mutate(
+    models = map(strap, ~lm(tmax ~ tmin + prcp, data = .x)),
+    results = map(models, broom::tidy)) %>%
+  select(-strap, -models) %>%
+  unnest(results) %>%
+  select(.id, term, estimate) %>%
+  pivot_wider(
+    names_from = "term",
+    values_from = "estimate") %>%
+  mutate(
+    log_function = log(`(Intercept)` * tmin))
 
-## Note: broom::glance() is helpful for extracting r̂ 2 from a fitted regression, and broom::tidy() (with some additional wrangling) should help in computing log(β̂ 1∗β̂ 2)
-.
+log_plot = log_estimate %>%
+  ggplot(aes(x = log_function)) +
+  geom_density() +
+  labs(
+    x = "Log Function",
+    y = "Density",
+    title = "Density Plot of Log Function"
+  )
 
+print(log_plot)
 
+```
+
+## Identifying a 95% CI for log(beta_0 * beta_1)
+```{r}
+log_estimate %>%
+  summarise(
+    lower_limit = quantile(log_function, 0.025),
+    upper_limit = quantile(log_function, 0.975)) %>%
+  knitr::kable(digits = 3)
+```
+
+  * The 95% confidence interval for log(beta_0 * beta_1) is (2.055 and 2.138)
 
 
 

@@ -219,7 +219,7 @@ r_squared %>%
 ```{r}
 log_estimate =
   weather_df %>%
-  modelr::bootstrap(n=5000) %>%
+  modelr::bootstrap(n=1000) %>%
   mutate(
     models = map(strap, ~lm(tmax ~ tmin + prcp, data = .x)),
     results = map(models, broom::tidy)) %>%
@@ -230,7 +230,7 @@ log_estimate =
     names_from = "term",
     values_from = "estimate") %>%
   mutate(
-    log_function = log(`(Intercept)` * tmin))
+    log_function = log(prcp * tmin))
 
 log_plot = log_estimate %>%
   ggplot(aes(x = log_function)) +

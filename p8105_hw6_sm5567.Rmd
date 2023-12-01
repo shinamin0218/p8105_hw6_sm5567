@@ -187,8 +187,8 @@ r_squared =
 ```
 
 ```{r}
-r_squared_plot =
-  ggplot(data = r_squared, aes(x = r_squared)) +
+r_squared_plot = r_squared %>%
+  ggplot(aes(x = r.squared)) +
   geom_density() +
   labs(
     title = "Distribution of R-squared Values",

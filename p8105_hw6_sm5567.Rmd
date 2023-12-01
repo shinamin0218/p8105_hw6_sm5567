@@ -187,9 +187,8 @@ r_squared =
 ```
 
 ```{r}
-# Plot the Distribution of R-squared Values
 r_squared_plot =
-  ggplot(r_squared, aes(x = r_squared)) +
+  ggplot(data = r_squared, aes(x = r_squared)) +
   geom_density() +
   labs(
     title = "Distribution of R-squared Values",
@@ -197,10 +196,6 @@ r_squared_plot =
     y = "Density"
   ) +
   theme_minimal()
-
-# Describe the Findings
-cat("Summary of Bootstrap Estimates for R-squared:\n")
-summary(r_squared$r_squared)
 ```
 
 ## . Using the 5000 bootstrap estimates, identify the 2.5% and 97.5% quantiles to provide a 95% confidence interval for r̂ 2 and log(β̂ 0∗β̂.1)

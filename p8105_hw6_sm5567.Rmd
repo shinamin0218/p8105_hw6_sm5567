@@ -27,19 +27,6 @@ scale_fill_discrete = scale_fill_viridis_d
 theme_set(theme_minimal() + theme(legend.position = "bottom"))
 ```
 
-### Due date
-
-Due: December 3 at 11:59pm. 
-
-### Points
-
-| Problem         | Points    |
-|:--------------- |:--------- |
-| Problem 0       | 20        |
-| Problem 1       | --        |
-| Problem 2       | 40        |
-| Problem 3       | 40        |
-
 
 ### Problem 0
 
@@ -286,15 +273,19 @@ birthweight_data =
     malform = as.factor(malform),
     mrace = as.factor(mrace)
   )
+
+colSums(is.na(birthweight_data))
 ```
+  * Transformed numerical variables into categorical ones and subsequently employed the `colSums(is.na(birthweight_data))` function to assess the presence of missing data, revealing an absence of any such values.
 
 ## Proposing a regression model for birthweight. 
 ```{r}
 fit_birthweight = lm(bwt ~ smoken + pnumlbw + momage, data = birthweight_data)
 fit_birthweight %>%  broom::tidy()
 ```
+  * Created a regression model using `fit_birthweight` dataset.
 
-## Showing a plot of model residuals against fitted values – use add_predictions and add_residuals in making this plot: 
+## Making a plot to compare the models 
 ```{r}
 # Adding residuals and predictions to birthweight_data
 residuals_predictions_data =
@@ -311,6 +302,8 @@ ggplot(residuals_predictions_data, aes(x = pred, y = resid)) +
     y = "Residuals"
   )
 ```
+  * Created a plot of model residuals against fitted values – used `add_predictions` and `add_residuals` in making this plot.
+
 
 ## Comparing your model to two others:
 ```{r}

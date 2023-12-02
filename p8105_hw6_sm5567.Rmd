@@ -294,13 +294,17 @@ residuals_predictions_data =
   modelr::add_predictions(fit_birthweight)
 
 # Creating a scatter plot of residuals against fitted values
-ggplot(residuals_predictions_data, aes(x = pred, y = resid)) + 
+residuals_plot =
+  ggplot(residuals_predictions_data, aes(x = pred, y = resid)) + 
   geom_point() +
   labs(
     title = "Residuals vs Fitted Values",
     x = "Fitted",
     y = "Residuals"
-  )
+  ) +
+  geom_smooth()
+
+print(residuals_plot)
 ```
   * Created a plot of model residuals against fitted values – used `add_predictions` and `add_residuals` in making this plot.
 

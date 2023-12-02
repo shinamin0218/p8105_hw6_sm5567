@@ -159,7 +159,7 @@ weather_df =
   select(name, id, everything())
 ```
 
-## Fitting a regression model
+## Fitting a regression model.
 ```{r}
 fit =
   lm(tmax ~ tmin + prcp, data = weather_df) %>%
@@ -167,15 +167,14 @@ fit =
   knitr::kable(digits = 3)
 ```
 
-## Creating function for bootstrap
-
+## Creating function for bootstrap.
 ```{r}
 boot_sample = function(weather_df) {
   sample_frac(weather_df, replace = TRUE)
 }
 ```
 
-## Use 5000 bootstrap samples and, for each bootstrap sample, produce estimates of these two quantities. Plot the distribution of your estimates, and describe these in words. 
+## Producing estimates of these two quantities. 
 ```{r}
 r_squared =
   weather_df %>%
@@ -186,9 +185,10 @@ r_squared =
   ) %>%
   unnest(results)
 
-## Do I need to pivot wider here?
 ```
 
+
+##  Plotting the distribution of the estimates.
 ```{r}
 r_squared_plot =
   ggplot(r_squared, aes(x = r.squared)) +
@@ -202,6 +202,9 @@ r_squared_plot =
 
 print(r_squared_plot)
 ```
+  * These density plots visually represent the distribution of the bootstrap estimates for `r_squared` and `log(beta_1 * beta_2)`. The plot for `r_squared` shows a distribution that is very close to normal, with a slight left-skewness. The values span a range from approximately 0.888 to 0.941.
+
+
 
 
 ## Identifying the 2.5% and 97.5% quantiles to provide a 95% confidencePerforming a 95% confidence interval for r̂ 2 and log(β̂ 0∗β̂.1)
@@ -245,6 +248,10 @@ print(log_plot)
 
 ```
 
+  * In contrast, the plot for `log(beta_1 * beta_2)` shows a distinct left-skewness. The values span a range from approximately -8.007 to -4.615. 
+
+
+
 ## Identifying a 95% CI for log(beta_0 * beta_1)
 ```{r}
 log_estimate %>%
@@ -255,7 +262,35 @@ log_estimate %>%
   knitr::kable(digits = 3)
 ```
 
-  * The 95% confidence interval for log(beta_0 * beta_1) is (-8.007 and -4.615)
+  * The 95% confidence interval for log(beta_0 * beta_1) lies between (-8.007 and -4.615)
+
+
+## Problem 3
+
+```{r}
+library(tidyverse)
+library(modelr)
+library(mgcv)
+
+```
+
+```{r}
+set.seed(1)
+```
+
+## Loading and cleaning the data for regression analysis.
+
+
+## Propose a regression model for birthweight. This model may be based on a hypothesized structure for the factors that underly birthweight, on a data-driven model-building process, or a combination of the two. Describe your modeling process and show a plot of model residuals against fitted values – use add_predictions and add_residuals in making this plot.
+
+
+## Compare your model to two others:
+One using length at birth and gestational age as predictors (main effects only)
+One using head circumference, length, sex, and all interactions (including the three-way interaction) between these
+
+## Make this comparison in terms of the cross-validated prediction error; use crossv_mc and functions in purrr as appropriate.
+
+## Note that although we expect your model to be reasonable, model building itself is not a main idea of the course and we don’t necessarily expect your model to be “optimal”.
 
 
 

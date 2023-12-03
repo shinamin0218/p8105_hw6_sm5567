@@ -307,6 +307,7 @@ residuals_plot =
 print(residuals_plot)
 ```
   * Created a plot of model residuals against fitted values – used `add_predictions` and `add_residuals` in making this plot.
+  * This plot enables the observation that the residuals scatter around 0.
 
 
 ## Comparing your model to two others:
